@@ -1,0 +1,14 @@
+{
+  "version": "0.1.0",
+  "systems": [
+    {
+      "name": "example-crm",
+      "category": "crm|erp|sheets|api|db|other",
+      "owner": "client_or_internal_owner",
+      "criticality": "low|medium|high",
+      "auth": { "type": "api_key|oauth|basic|jwt|other", "notes": "store only refs in configs/ambientes.json" },
+      "data_sensitivity": { "contains_pii": false, "notes": "" },
+      "endpoints_doc": "integrations/specs_endpoints.md"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "name": "tech-agentes",
+  "version": "0.1.0",
+  "owners": ["CTO"],
+  "environment": "dev",
+  "tenant_id": "",
+  "deadlines": {},
+  "kpis": [],
+  "acceptance_criteria": [
+    "CLI init/install-rules/validate funcionais",
+    "Scaffold completo do prompt presente no repo",
+    "Sem estimativas de tokens/latência/custo sem instrumentação"
+  ],
+  "constraints": [],
+  "budgets": { "run_usd": 0, "daily_usd": 0, "project_usd": 0 },
+  "slo": { "latency_s": 8, "critical_error_rate_max": 0.01, "daily_budget_usd": 0 },
+  "instrumentation": { "provider": "none", "enabled": false, "notes": "Enable Langfuse/Helicone/SDK for stage/prod." }
+}

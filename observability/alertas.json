@@ -1,0 +1,271 @@
+{
+  "version": "1.0.0",
+  "updated_at": "2026-01-18",
+  "description": "Configuração de alertas para projetos tech-agentes",
+  "notification_channels": {
+    "slack": {
+      "enabled": false,
+      "webhook_url_ref": "env:SLACK_WEBHOOK_URL",
+      "channels": {
+        "tech-alerts": "#tech-alerts",
+        "deploys": "#deploys",
+        "oncall": "#oncall"
+      }
+    },
+    "pagerduty": {
+      "enabled": false,
+      "integration_key_ref": "env:PAGERDUTY_KEY",
+      "service_id": ""
+    },
+    "email": {
+      "enabled": false,
+      "smtp_ref": "env:SMTP_URL",
+      "recipients": {
+        "cto": "cto@example.com",
+        "qa-lead": "qa@example.com",
+        "tech-leads": ["tech1@example.com", "tech2@example.com"]
+      }
+    }
+  },
+  "severity_levels": {
+    "critical": {
+      "description": "Serviço indisponível ou risco imediato",
+      "response_time": "5m",
+      "channels": ["pagerduty", "slack:oncall"],
+      "escalation_after": "15m"
+    },
+    "warning": {
+      "description": "Degradação ou risco potencial",
+      "response_time": "30m",
+      "channels": ["slack:tech-alerts"],
+      "escalation_after": "2h"
+    },
+    "info": {
+      "description": "Informativo, sem ação imediata",
+      "response_time": "24h",
+      "channels": ["slack:tech-alerts"],
+      "escalation_after": null
+    }
+  },
+  "alerts": [
+    {
+      "id": "ALERT-001",
+      "name": "HighLLMErrorRate",
+      "description": "Taxa de erro em requests LLM acima do threshold",
+      "metric": "llm_error_rate",
+      "condition": {
+        "operator": ">",
+        "threshold": 0.05,
+        "duration": "5m",
+        "aggregation": "avg"
+      },
+      "severity": "critical",
+      "labels": ["llm", "error"],
+      "annotations": {
+        "summary": "Alta taxa de erro em LLM: {{ $value | humanizePercentage }}",
+        "description": "A taxa de erro de requests LLM está acima de 5% nos últimos 5 minutos.",
+        "runbook_url": "https://docs.exemplo.com/runbooks/llm-errors"
+      },
+      "actions": {
+        "auto_remediation": false,
+        "notify": ["slack:oncall", "pagerduty"],
+        "create_incident": true
+      }
+    },
+    {
+      "id": "ALERT-002",
+      "name": "HighLLMLatency",
+      "description": "Latência P95 de LLM acima do SLO",
+      "metric": "llm_latency_p95",
+      "condition": {
+        "operator": ">",
+        "threshold": 8,
+        "duration": "5m",
+        "aggregation": "avg"
+      },
+      "severity": "warning",
+      "labels": ["llm", "latency"],
+      "annotations": {
+        "summary": "Alta latência em LLM: {{ $value }}s P95",
+        "description": "A latência P95 de requests LLM está acima de 8s."
+      },
+      "actions": {
+        "auto_remediation": false,
+        "notify": ["slack:tech-alerts"]
+      }
+    },
+    {
+      "id": "ALERT-003",
+      "name": "DailyBudgetExceeded",
+      "description": "Custo diário excedeu o budget definido",
+      "metric": "daily_cost_usd",
+      "condition": {
+        "operator": ">",
+        "threshold_ref": "configs.slo.daily_budget_usd",
+        "duration": "0m",
+        "aggregation": "sum"
+      },
+      "severity": "critical",
+      "labels": ["cost", "budget"],
+      "annotations": {
+        "summary": "Budget diário excedido: ${{ $value }}",
+        "description": "O custo diário de LLM excedeu o budget configurado."
+      },
+      "actions": {
+        "auto_remediation": {
+          "enabled": true,
+          "action": "throttle_requests",
+          "config": {
+            "rate_limit": "10/min"
+          }
+        },
+        "notify": ["slack:oncall", "email:cto"],
+        "create_incident": true
+      }
+    },
+    {
+      "id": "ALERT-004",
+      "name": "BudgetWarning",
+      "description": "Custo diário atingiu 80% do budget",
+      "metric": "daily_cost_usd",
+      "condition": {
+        "operator": ">",
+        "threshold_percent": 0.8,
+        "threshold_ref": "configs.slo.daily_budget_usd",
+        "duration": "0m"
+      },
+      "severity": "warning",
+      "labels": ["cost", "budget"],
+      "annotations": {
+        "summary": "Budget em 80%: ${{ $value }}",
+        "description": "O custo diário atingiu 80% do budget."
+      },
+      "actions": {
+        "notify": ["slack:tech-alerts"]
+      }
+    },
+    {
+      "id": "ALERT-005",
+      "name": "GoldenSetRegression",
+      "description": "Golden set com taxa de sucesso abaixo do threshold",
+      "metric": "eval_golden_set_pass_rate",
+      "condition": {
+        "operator": "<",
+        "threshold": 0.95,
+        "duration": "0m"
+      },
+      "severity": "critical",
+      "labels": ["quality", "eval"],
+      "annotations": {
+        "summary": "Regressão em golden set: {{ $labels.golden_set_id }}",
+        "description": "A taxa de sucesso do golden set caiu para {{ $value | humanizePercentage }}."
+      },
+      "actions": {
+        "auto_remediation": {
+          "enabled": true,
+          "action": "block_promotion",
+          "config": {
+            "environments": ["stage", "prod"]
+          }
+        },
+        "notify": ["slack:tech-alerts", "email:qa-lead"]
+      }
+    },
+    {
+      "id": "ALERT-006",
+      "name": "WorkflowGateBlocked",
+      "description": "Gate de workflow bloqueado",
+      "metric": "workflow_gate_status",
+      "condition": {
+        "operator": "==",
+        "threshold": 0,
+        "duration": "0m"
+      },
+      "severity": "warning",
+      "labels": ["workflow", "gate"],
+      "annotations": {
+        "summary": "Gate bloqueado: {{ $labels.gate_name }}",
+        "description": "O gate {{ $labels.gate_name }} está bloqueando o workflow."
+      },
+      "actions": {
+        "notify": ["slack:tech-alerts"]
+      }
+    },
+    {
+      "id": "ALERT-007",
+      "name": "InstrumentationDisabled",
+      "description": "Instrumentação desabilitada em ambiente não-dev",
+      "metric": "instrumentation_enabled",
+      "condition": {
+        "operator": "==",
+        "threshold": 0,
+        "filter": "environment != 'dev'"
+      },
+      "severity": "critical",
+      "labels": ["compliance", "observability"],
+      "annotations": {
+        "summary": "Instrumentação desabilitada em {{ $labels.environment }}",
+        "description": "A instrumentação está desabilitada em ambiente não-dev, violando política."
+      },
+      "actions": {
+        "auto_remediation": {
+          "enabled": true,
+          "action": "block_promotion"
+        },
+        "notify": ["slack:oncall", "email:cto"]
+      }
+    },
+    {
+      "id": "ALERT-008",
+      "name": "AgentTaskFailure",
+      "description": "Agente com alta taxa de falha em tarefas",
+      "metric": "agent_task_failure_rate",
+      "condition": {
+        "operator": ">",
+        "threshold": 0.1,
+        "duration": "10m"
+      },
+      "severity": "warning",
+      "labels": ["agent", "task"],
+      "annotations": {
+        "summary": "Alta taxa de falha: {{ $labels.agent_name }}",
+        "description": "O agente {{ $labels.agent_name }} tem taxa de falha de {{ $value | humanizePercentage }}."
+      },
+      "actions": {
+        "notify": ["slack:tech-alerts"]
+      }
+    }
+  ],
+  "silences": {
+    "description": "Silenciamentos programados (manutenções, etc.)",
+    "active": []
+  },
+  "escalation_policies": [
+    {
+      "name": "default",
+      "steps": [
+        {
+          "delay": "0m",
+          "targets": ["oncall"]
+        },
+        {
+          "delay": "15m",
+          "targets": ["tech-lead"]
+        },
+        {
+          "delay": "30m",
+          "targets": ["cto"]
+        }
+      ]
+    },
+    {
+      "name": "cost",
+      "steps": [
+        {
+          "delay": "0m",
+          "targets": ["cto", "finance"]
+        }
+      ]
+    }
+  ]
+}

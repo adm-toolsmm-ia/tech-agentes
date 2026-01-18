@@ -1,0 +1,34 @@
+# BEGIN TECH-AGENTES RULES
+# TECH-AGENTES (Repo Rules) — Multiagentes + Padrões (Context-first)
+#
+# Hierarquia (ordem de precedência):
+# 1) MUST (sempre): segurança, LGPD/PII, segredos, validação, não destrutivo sem confirmação
+# 2) Decisões do projeto-alvo: se existir `configs/projeto.json` e `docs/padrões/padroes_projeto.md`, prevalecem
+# 3) Fallback contextual: defaults por tipo/fase quando o projeto não define
+#
+# Nota: não forçar “JSON em tudo”. JSON “Plano/Resposta Padrão” é obrigatório apenas para
+# tarefas de orquestração/execução e geração de artefatos (workflows, file_ops).
+
+## MUST — Segurança e Integridade
+- Nunca commitar secrets (tokens, senhas, chaves). Use env vars ou referência em `configs/ambientes.json`.
+- Proteger PII (LGPD): minimizar dados, mascarar/anônimizar quando aplicável; não vazar em logs.
+- Validar inputs e usar queries parametrizadas.
+- Proibir operações destrutivas sem confirmação explícita do usuário (ex.: rm -rf, reset --hard, drop).
+
+## Context-first (mandatório)
+- Antes de agir, ler o contexto do projeto-alvo e procurar decisões locais:
+  - `configs/projeto.json`, `configs/modelos.json`, `configs/ambientes.json`
+  - `docs/padrões/padroes_projeto.md`, `docs/seguranca/politicas.md`
+  - `workflows/plano_execucao.json`, `workflows/backlog_tarefas.json`
+
+## Modo Multiagentes
+- Se existirem `agents/` e `workflows/`, operar como sistema multiagentes:
+  - respeitar mandates/outputs por agente
+  - gerar `file_ops` com allowlist e checksum quando criar/alterar arquivos em automação
+
+## Observabilidade (sem estimativas não instrumentadas)
+- Se não houver instrumentação ativa, NÃO preencher tokens/latência/custo como “estimativa”.
+- Para stage/prod, bloquear promoção sem evidência de instrumentação ou aprovação do CTO.
+
+# END TECH-AGENTES RULES
+

@@ -1,0 +1,32 @@
+# <tipo>(<escopo>): <assunto>
+
+# Linha do assunto obrigatória (máximo 72 caracteres)
+# Use o modo imperativo: "Adicionar feature" e não "Adicionando" ou "Adicionado"
+#
+# <corpo opcional>
+# Explique o "o quê" e "por quê", não o "como". Use múltiplas linhas se necessário.
+# Separe o corpo do assunto com uma linha em branco.
+#
+# <rodapé opcional>
+# Referencie issues: "Fixes #123" ou "Closes #456"
+
+# Tipos válidos:
+#   feat:     Nova funcionalidade
+#   fix:      Correção de bug
+#   docs:     Mudanças em documentação
+#   style:    Formatação (não afeta código)
+#   refactor: Refatoração de código
+#   test:     Adicionar/modificar testes
+#   chore:    Manutenção (deps, config, etc)
+#   perf:     Melhoria de performance
+#   ci:       Mudanças em CI/CD
+#   build:    Mudanças em build system
+#
+# Escopos comuns:
+#   configs, agents, templates, schemas, cli, docs, workflows, devops
+#
+# Exemplos:
+#   feat(agents): adicionar agente specialist healthcare
+#   fix(schemas): corrigir validação de tenant_id vazio
+#   docs(versionamento): atualizar política de tags
+#   chore(deps): atualizar pydantic para v2.9

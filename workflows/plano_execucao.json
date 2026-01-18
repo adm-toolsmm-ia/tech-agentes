@@ -1,0 +1,282 @@
+{
+  "version": "1.0.0",
+  "environment": "dev",
+  "metadata": {
+    "created_at": "2026-01-18",
+    "updated_at": "2026-01-18",
+    "owner": "CTO",
+    "description": "Plano de execução padrão para projetos tech-agentes"
+  },
+  "global_config": {
+    "max_retries": 3,
+    "retry_delay_seconds": 30,
+    "timeout_seconds": 300,
+    "notification_channel": "slack:tech-alerts",
+    "require_cto_approval_for": ["stage", "prod"]
+  },
+  "tasks": [
+    {
+      "id": "context-brief",
+      "assigned_to": "contexto_requisitos",
+      "goal": "Capturar brief, stakeholders, regras, KPIs, critérios de aceite e perguntas abertas",
+      "acceptance_criteria": [
+        "docs/brief/brief_atual.md atualizado",
+        "workflows/backlog_tarefas.json com backlog inicial"
+      ],
+      "deliverable_format": "md+json",
+      "deadline": "",
+      "trigger": {
+        "type": "manual",
+        "condition": "Início de novo projeto ou mudança significativa de escopo",
+        "inputs_required": ["brief_source", "stakeholder_list"]
+      },
+      "error_handling": {
+        "on_failure": "notify_and_pause",
+        "retry": {
+          "enabled": true,
+          "max_attempts": 2,
+          "backoff": "linear"
+        },
+        "fallback": "Escalar para CTO para clarificação de requisitos"
+      },
+      "rollback": {
+        "enabled": false,
+        "reason": "Tarefa de captura, não há estado anterior para reverter"
+      },
+      "gates": [],
+      "dependencies": []
+    },
+    {
+      "id": "security-assessment",
+      "assigned_to": "seguranca_compliance",
+      "goal": "Avaliar dados sensíveis (PII/LGPD), segredos, integrações e riscos de prompt injection",
+      "acceptance_criteria": [
+        "docs/seguranca/politicas.md atualizado (se necessário)",
+        "security_findings reportado no Plano/Resposta Padrão",
+        "Checklist LGPD completo para projetos com PII"
+      ],
+      "deliverable_format": "md",
+      "deadline": "",
+      "trigger": {
+        "type": "event",
+        "condition": "context-brief.completed OR integration_added OR data_model_changed",
+        "inputs_required": ["brief", "data_inventory"]
+      },
+      "error_handling": {
+        "on_failure": "block_pipeline",
+        "retry": {
+          "enabled": false
+        },
+        "fallback": "Escalar para Security Lead e CTO imediatamente"
+      },
+      "rollback": {
+        "enabled": false,
+        "reason": "Assessment de segurança é informativo, não modifica sistema"
+      },
+      "gates": [
+        {
+          "name": "no_critical_findings",
+          "condition": "security_findings.critical == 0",
+          "blocking": true
+        }
+      ],
+      "dependencies": ["context-brief"]
+    },
+    {
+      "id": "observability-baseline",
+      "assigned_to": "observabilidade_custos",
+      "goal": "Definir logging mínimo (run_id, tenant_id, modelo, latência, custo) e política de bloqueio sem instrumentação",
+      "acceptance_criteria": [
+        "observability/dashboards.json atualizado",
+        "Política 'sem estimativas não instrumentadas' aplicada",
+        "Alertas configurados para SLOs definidos"
+      ],
+      "deliverable_format": "json",
+      "deadline": "",
+      "trigger": {
+        "type": "event",
+        "condition": "context-brief.completed",
+        "inputs_required": ["slo_targets", "budget_limits"]
+      },
+      "error_handling": {
+        "on_failure": "notify_and_continue",
+        "retry": {
+          "enabled": true,
+          "max_attempts": 2,
+          "backoff": "exponential"
+        },
+        "fallback": "Usar defaults de observabilidade do framework"
+      },
+      "rollback": {
+        "enabled": true,
+        "procedure": "Reverter para configuração anterior em observability/dashboards.json",
+        "auto": false
+      },
+      "gates": [
+        {
+          "name": "instrumentation_configured",
+          "condition": "configs.instrumentation.enabled == true OR environment == 'dev'",
+          "blocking": true,
+          "message": "Instrumentação obrigatória para stage/prod"
+        }
+      ],
+      "dependencies": ["context-brief"]
+    },
+    {
+      "id": "prompt-templates",
+      "assigned_to": "engenharia_prompt",
+      "goal": "Estruturar templates de análise/extração/geração/decisão e critérios de sucesso",
+      "acceptance_criteria": [
+        "prompts/templates_*.md revisados com formatos esperados",
+        "Checklist de segurança de prompt (injeção, grounding)",
+        "Golden sets definidos para cada template crítico"
+      ],
+      "deliverable_format": "md",
+      "deadline": "",
+      "trigger": {
+        "type": "event",
+        "condition": "context-brief.completed AND security-assessment.completed",
+        "inputs_required": ["use_cases", "output_schemas"]
+      },
+      "error_handling": {
+        "on_failure": "notify_and_pause",
+        "retry": {
+          "enabled": true,
+          "max_attempts": 3,
+          "backoff": "linear"
+        },
+        "fallback": "Usar templates base do framework sem customização"
+      },
+      "rollback": {
+        "enabled": true,
+        "procedure": "Reverter para versão anterior dos templates via git",
+        "auto": false
+      },
+      "gates": [
+        {
+          "name": "golden_sets_pass",
+          "condition": "evals.golden_sets.pass_rate >= 0.95",
+          "blocking": true,
+          "message": "Golden sets devem passar com 95%+ antes de promover"
+        }
+      ],
+      "dependencies": ["context-brief", "security-assessment"]
+    },
+    {
+      "id": "architecture-devops",
+      "assigned_to": "eng_software_arquiteto_ia_devops",
+      "goal": "Definir baseline de arquitetura/CI/CD/runbooks e quando exigir ADR + approve",
+      "acceptance_criteria": [
+        "ADR template pronto e regra de uso definida",
+        "devops/runbooks.md e devops/pipelines.yaml revisados",
+        "Estratégia de rollback documentada"
+      ],
+      "deliverable_format": "md+yaml",
+      "deadline": "",
+      "trigger": {
+        "type": "event",
+        "condition": "context-brief.completed",
+        "inputs_required": ["tech_stack", "deployment_targets"]
+      },
+      "error_handling": {
+        "on_failure": "notify_and_pause",
+        "retry": {
+          "enabled": true,
+          "max_attempts": 2,
+          "backoff": "linear"
+        },
+        "fallback": "Usar configuração padrão do framework"
+      },
+      "rollback": {
+        "enabled": true,
+        "procedure": "Reverter pipeline e infra via git e terraform destroy se necessário",
+        "auto": false,
+        "requires_approval": true
+      },
+      "gates": [
+        {
+          "name": "pipeline_passing",
+          "condition": "ci.status == 'green'",
+          "blocking": true
+        },
+        {
+          "name": "adr_approved",
+          "condition": "adr.status == 'approved' OR no_breaking_changes",
+          "blocking": true,
+          "message": "Mudanças estruturais requerem ADR aprovada"
+        }
+      ],
+      "dependencies": ["context-brief"]
+    },
+    {
+      "id": "qa-evals-gates",
+      "assigned_to": "qualidade_auditoria_testes",
+      "goal": "Definir gates mínimos (contract tests + evals) antes de stage/prod",
+      "acceptance_criteria": [
+        "evals/golden_sets.json e evals/rubricas.json com exemplos mínimos",
+        "Regra de evidência em evals/resultados antes de stage/prod",
+        "Contract tests para integrações críticas"
+      ],
+      "deliverable_format": "json+md",
+      "deadline": "",
+      "trigger": {
+        "type": "event",
+        "condition": "prompt-templates.completed AND architecture-devops.completed",
+        "inputs_required": ["test_scope", "integration_list"]
+      },
+      "error_handling": {
+        "on_failure": "block_pipeline",
+        "retry": {
+          "enabled": true,
+          "max_attempts": 3,
+          "backoff": "exponential"
+        },
+        "fallback": "Escalar para QA Lead e bloquear promoção"
+      },
+      "rollback": {
+        "enabled": false,
+        "reason": "Evals são gates, não modificam sistema"
+      },
+      "gates": [
+        {
+          "name": "all_tests_pass",
+          "condition": "test_suite.pass_rate == 1.0",
+          "blocking": true
+        },
+        {
+          "name": "coverage_threshold",
+          "condition": "coverage >= 0.80",
+          "blocking": true
+        },
+        {
+          "name": "no_regressions",
+          "condition": "regressions == 0",
+          "blocking": true
+        }
+      ],
+      "dependencies": ["prompt-templates", "architecture-devops"]
+    }
+  ],
+  "promotion_rules": {
+    "dev_to_stage": {
+      "required_gates": ["all_tests_pass", "coverage_threshold", "no_critical_findings"],
+      "approval_required": false,
+      "auto_promote": true
+    },
+    "stage_to_prod": {
+      "required_gates": ["all_tests_pass", "coverage_threshold", "no_critical_findings", "instrumentation_configured", "golden_sets_pass"],
+      "approval_required": true,
+      "approvers": ["cto", "qa_lead"],
+      "evidence_required": ["evals/resultados/", "security_assessment"],
+      "auto_promote": false
+    }
+  },
+  "notifications": {
+    "on_task_start": ["assigned_to"],
+    "on_task_complete": ["assigned_to", "orquestrador"],
+    "on_task_failure": ["assigned_to", "orquestrador", "cto"],
+    "on_gate_blocked": ["cto", "qa_lead"],
+    "on_promotion": ["all_stakeholders"]
+  },
+  "recommendations": []
+}

@@ -1,0 +1,13 @@
+{
+  "version": "0.1.0",
+  "items": [
+    {
+      "id": "add-specialist-protocol",
+      "assigned_to": "orquestrador",
+      "goal": "Formalizar protocolo ROI para criação de specialists (cap=2/iteração) e gates do CTO",
+      "acceptance_criteria": ["Documento de padrões atualizado com protocolo e exemplos"],
+      "deliverable_format": "md",
+      "deadline": ""
+    }
+  ]
+}

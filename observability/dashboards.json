@@ -1,0 +1,295 @@
+{
+  "version": "1.0.0",
+  "updated_at": "2026-01-18",
+  "description": "Configuração de dashboards e métricas para projetos tech-agentes",
+  "provider": {
+    "name": "configurable",
+    "supported": ["datadog", "grafana", "cloudwatch"],
+    "current": "none",
+    "notes": "Definir provider em configs/projeto.json.instrumentation"
+  },
+  "metrics": [
+    {
+      "name": "llm_request_total",
+      "type": "counter",
+      "scope": "task",
+      "labels": ["model", "task_type", "status", "tenant_id"],
+      "description": "Total de requests para LLMs",
+      "notes": "Requires instrumented telemetry"
+    },
+    {
+      "name": "llm_request_duration_seconds",
+      "type": "histogram",
+      "scope": "task",
+      "labels": ["model", "task_type", "tenant_id"],
+      "buckets": [0.1, 0.5, 1, 2, 5, 10, 30],
+      "description": "Latência de requests LLM",
+      "notes": "Requires instrumented telemetry"
+    },
+    {
+      "name": "llm_tokens_total",
+      "type": "counter",
+      "scope": "task_model",
+      "labels": ["model", "task_type", "token_type", "tenant_id"],
+      "description": "Total de tokens consumidos (input/output)",
+      "notes": "Requires instrumented telemetry. token_type: input|output"
+    },
+    {
+      "name": "llm_cost_usd",
+      "type": "counter",
+      "scope": "task_model",
+      "labels": ["model", "task_type", "tenant_id"],
+      "description": "Custo em USD por request",
+      "notes": "Requires instrumented telemetry and pricing_version"
+    },
+    {
+      "name": "llm_error_total",
+      "type": "counter",
+      "scope": "task",
+      "labels": ["model", "task_type", "error_type", "tenant_id"],
+      "description": "Total de erros em requests LLM",
+      "notes": "error_type: rate_limit|timeout|invalid_response|other"
+    },
+    {
+      "name": "agent_task_total",
+      "type": "counter",
+      "scope": "agent",
+      "labels": ["agent_name", "task_type", "status", "tenant_id"],
+      "description": "Total de tarefas executadas por agente",
+      "notes": "Requires instrumented telemetry"
+    },
+    {
+      "name": "agent_task_duration_seconds",
+      "type": "histogram",
+      "scope": "agent",
+      "labels": ["agent_name", "task_type", "tenant_id"],
+      "buckets": [1, 5, 10, 30, 60, 120, 300],
+      "description": "Duração de tarefas por agente",
+      "notes": "Requires instrumented telemetry"
+    },
+    {
+      "name": "workflow_gate_status",
+      "type": "gauge",
+      "scope": "workflow",
+      "labels": ["gate_name", "environment"],
+      "description": "Status dos gates (1=pass, 0=fail)",
+      "notes": "Atualizado após cada avaliação de gate"
+    },
+    {
+      "name": "eval_golden_set_pass_rate",
+      "type": "gauge",
+      "scope": "eval",
+      "labels": ["golden_set_id", "prompt_version"],
+      "description": "Taxa de sucesso em golden sets",
+      "notes": "Atualizado após cada execução de eval"
+    }
+  ],
+  "slos": [
+    {
+      "name": "llm_latency_p95",
+      "metric": "llm_request_duration_seconds",
+      "target": "quantile(0.95) < 8s",
+      "window": "7d",
+      "alert_threshold": 0.99,
+      "description": "95% das requests devem completar em menos de 8s"
+    },
+    {
+      "name": "llm_error_rate",
+      "metric": "llm_error_total / llm_request_total",
+      "target": "< 0.01",
+      "window": "24h",
+      "alert_threshold": 0.005,
+      "description": "Taxa de erro deve ser menor que 1%"
+    },
+    {
+      "name": "daily_cost_budget",
+      "metric": "sum(llm_cost_usd)",
+      "target": "< configs.slo.daily_budget_usd",
+      "window": "24h",
+      "alert_threshold": 0.8,
+      "description": "Custo diário não deve exceder budget"
+    }
+  ],
+  "dashboards": [
+    {
+      "name": "LLM Overview",
+      "description": "Visão geral de uso e performance de LLMs",
+      "panels": [
+        {
+          "title": "Request Rate",
+          "type": "timeseries",
+          "query": "rate(llm_request_total[5m])",
+          "unit": "req/s"
+        },
+        {
+          "title": "Latency P50/P95/P99",
+          "type": "timeseries",
+          "query": "histogram_quantile(0.95, rate(llm_request_duration_seconds_bucket[5m]))",
+          "unit": "seconds"
+        },
+        {
+          "title": "Error Rate",
+          "type": "timeseries",
+          "query": "rate(llm_error_total[5m]) / rate(llm_request_total[5m])",
+          "unit": "percent"
+        },
+        {
+          "title": "Tokens by Model",
+          "type": "piechart",
+          "query": "sum(llm_tokens_total) by (model)",
+          "unit": "tokens"
+        },
+        {
+          "title": "Cost by Model (Last 24h)",
+          "type": "stat",
+          "query": "sum(increase(llm_cost_usd[24h])) by (model)",
+          "unit": "USD"
+        }
+      ]
+    },
+    {
+      "name": "Agent Performance",
+      "description": "Performance por agente",
+      "panels": [
+        {
+          "title": "Tasks by Agent",
+          "type": "barchart",
+          "query": "sum(agent_task_total) by (agent_name)",
+          "unit": "tasks"
+        },
+        {
+          "title": "Task Duration by Agent",
+          "type": "heatmap",
+          "query": "histogram_quantile(0.95, rate(agent_task_duration_seconds_bucket[1h])) by (agent_name)",
+          "unit": "seconds"
+        },
+        {
+          "title": "Success Rate by Agent",
+          "type": "gauge",
+          "query": "sum(agent_task_total{status='success'}) / sum(agent_task_total) by (agent_name)",
+          "unit": "percent"
+        }
+      ]
+    },
+    {
+      "name": "Cost Management",
+      "description": "Gestão de custos e budget",
+      "panels": [
+        {
+          "title": "Daily Cost",
+          "type": "timeseries",
+          "query": "sum(increase(llm_cost_usd[24h]))",
+          "unit": "USD"
+        },
+        {
+          "title": "Cost by Task Type",
+          "type": "piechart",
+          "query": "sum(llm_cost_usd) by (task_type)",
+          "unit": "USD"
+        },
+        {
+          "title": "Budget Utilization",
+          "type": "gauge",
+          "query": "sum(increase(llm_cost_usd[24h])) / configs.slo.daily_budget_usd",
+          "unit": "percent",
+          "thresholds": [0.5, 0.8, 1.0]
+        },
+        {
+          "title": "Cost Trend (7d)",
+          "type": "timeseries",
+          "query": "sum(increase(llm_cost_usd[1d]))",
+          "unit": "USD"
+        }
+      ]
+    },
+    {
+      "name": "Quality Gates",
+      "description": "Status de gates e evals",
+      "panels": [
+        {
+          "title": "Gate Status",
+          "type": "statusmap",
+          "query": "workflow_gate_status",
+          "unit": "status"
+        },
+        {
+          "title": "Golden Set Pass Rate",
+          "type": "gauge",
+          "query": "avg(eval_golden_set_pass_rate)",
+          "unit": "percent",
+          "thresholds": [0.8, 0.95, 1.0]
+        }
+      ]
+    }
+  ],
+  "alerts": [
+    {
+      "name": "HighErrorRate",
+      "condition": "rate(llm_error_total[5m]) / rate(llm_request_total[5m]) > 0.05",
+      "duration": "5m",
+      "severity": "critical",
+      "notification": ["slack:tech-alerts", "pagerduty"],
+      "runbook": "templates/devops/03_runbook_operacao.md#incidente-erro-rate"
+    },
+    {
+      "name": "HighLatency",
+      "condition": "histogram_quantile(0.95, rate(llm_request_duration_seconds_bucket[5m])) > 10",
+      "duration": "5m",
+      "severity": "warning",
+      "notification": ["slack:tech-alerts"],
+      "runbook": "templates/devops/03_runbook_operacao.md#incidente-latencia"
+    },
+    {
+      "name": "BudgetExceeded",
+      "condition": "sum(increase(llm_cost_usd[24h])) > configs.slo.daily_budget_usd",
+      "duration": "0m",
+      "severity": "critical",
+      "notification": ["slack:tech-alerts", "email:cto"],
+      "runbook": "templates/observability/02_cost_management_plan.md"
+    },
+    {
+      "name": "GateBlocked",
+      "condition": "workflow_gate_status == 0",
+      "duration": "0m",
+      "severity": "warning",
+      "notification": ["slack:tech-alerts"],
+      "runbook": "workflows/README.md#gates-e-promoção"
+    },
+    {
+      "name": "GoldenSetRegression",
+      "condition": "eval_golden_set_pass_rate < 0.95",
+      "duration": "0m",
+      "severity": "critical",
+      "notification": ["slack:tech-alerts", "email:qa-lead"],
+      "runbook": "evals/README.md"
+    }
+  ],
+  "reports": [
+    {
+      "name": "weekly_summary",
+      "schedule": "0 9 * * 1",
+      "recipients": ["cto", "tech-leads"],
+      "template": "observability/relatorios_periodicos.md",
+      "metrics_included": [
+        "total_requests",
+        "total_cost",
+        "avg_latency_p95",
+        "error_rate",
+        "top_models_by_cost",
+        "gate_pass_rate"
+      ]
+    },
+    {
+      "name": "monthly_cost_report",
+      "schedule": "0 9 1 * *",
+      "recipients": ["cto", "finance"],
+      "template": "observability/relatorios_periodicos.md",
+      "metrics_included": [
+        "total_cost_by_tenant",
+        "cost_trend",
+        "budget_utilization",
+        "cost_forecast"
+      ]
+    }
+  ]
+}

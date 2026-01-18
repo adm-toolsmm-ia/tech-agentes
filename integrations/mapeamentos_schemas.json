@@ -1,0 +1,12 @@
+{
+  "version": "0.1.0",
+  "mappings": [
+    {
+      "source": { "system": "example-crm", "entity": "Contact", "field": "email" },
+      "target": { "system": "data-warehouse", "entity": "contacts", "field": "email" },
+      "transform": "lowercase(trim(value))",
+      "required": true,
+      "notes": ""
+    }
+  ]
+}
