@@ -87,6 +87,12 @@ Configurar em `configs/projeto.json`:
 }
 ```
 
+### Guias por Provider
+
+- [`providers/datadog.md`](providers/datadog.md)
+- [`providers/grafana_prometheus.md`](providers/grafana_prometheus.md)
+- [`providers/langfuse.md`](providers/langfuse.md)
+
 ---
 
 ## Referências

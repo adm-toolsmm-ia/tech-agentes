@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "pricing_version": "2024-01",
+  "pricing_version": "2026-01",
   "thresholds": {
     "latency_s_p95_max": 8,
     "daily_budget_usd_max": 0
@@ -13,20 +13,20 @@
   "routing": [
     {
       "task_class": "architecture|compliance|context_long",
-      "preferred": ["gpt-4o", "claude-3-opus", "gemini-1.5-pro"],
-      "fallback": ["gpt-4o-mini", "claude-3-sonnet"],
+      "preferred": ["gpt-5.2-codex", "opus-4.5", "sonnet-4.5"],
+      "fallback": ["gpt-4o", "gpt-4o-mini"],
       "max_temperature": 0.3
     },
     {
       "task_class": "templated_generation|semi_structured_extraction",
-      "preferred": ["gpt-4o", "claude-3-sonnet", "gemini-1.5-pro"],
+      "preferred": ["sonnet-4.5", "gpt-4o", "gpt-5.2-codex"],
       "fallback": ["gpt-4o-mini"],
       "max_temperature": 0.5
     },
     {
       "task_class": "parsing|classification_simple",
       "preferred": ["gpt-4o-mini"],
-      "fallback": ["gpt-4o"],
+      "fallback": ["sonnet-4.5", "gpt-4o"],
       "max_temperature": 0.3
     }
   ]

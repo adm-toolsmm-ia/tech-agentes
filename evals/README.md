@@ -46,17 +46,29 @@ Critérios de avaliação com escalas definidas:
 ### 1. Rodar Golden Sets
 
 ```bash
-# Todos os casos
-tech-agents eval --all
+# Todos os casos (saída externa obrigatória)
+tech-agents eval . --outputs-json outputs_eval.json
 
 # Casos específicos
-tech-agents eval --cases extraction-json-001,analysis-requirements-001
+tech-agents eval . --cases extraction-json-001,analysis-requirements-001 --outputs-json outputs_eval.json
 
-# Por categoria
-tech-agents eval --category extraction
+# Smoke test (usa expected_output como saída)
+tech-agents eval . --use-expected --allow-skip-llm-judge
+```
 
-# Por criticidade
-tech-agents eval --criticality critical
+### Formato de outputs externos
+
+Arquivo JSON com `case_id` → `output`:
+
+```json
+{
+  "extraction-json-001": {
+    "entidades": [{"tipo": "documento", "valor": "2024-001", "valor_normalizado": "2024-001"}]
+  },
+  "analysis-requirements-001": {
+    "requisitos_funcionais": [{"id": "RF-001", "titulo": "Agendamento online", "prioridade": "must"}]
+  }
+}
 ```
 
 ### 2. Verificar Resultados
@@ -73,7 +85,7 @@ cat evals/resultados/latest_dev.json | jq '.results[] | select(.status == "faile
 
 ```bash
 # Verificar se pode promover
-tech-agents eval --check-gate --env stage
+tech-agents eval . --outputs-json outputs_eval.json --check-gate --env stage
 
 # Output:
 # ✅ Pass rate: 96% (threshold: 95%)

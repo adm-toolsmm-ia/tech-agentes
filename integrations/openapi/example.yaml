@@ -1,0 +1,24 @@
+openapi: 3.0.3
+info:
+  title: Example Integration API
+  version: "1.0.0"
+  description: Example OpenAPI spec for pilot validation
+servers:
+  - url: https://api.example.com/v1
+    description: Production
+paths:
+  /health:
+    get:
+      summary: Health check
+      operationId: healthCheck
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok

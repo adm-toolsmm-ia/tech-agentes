@@ -14,6 +14,7 @@ from tech_agents.schemas.common import ProjectRef, SLO
 from tech_agents.schemas.configs import EnvironmentsConfig, ModelPolicy, ProjectConfig
 from tech_agents.schemas.execution_log import ExecutionLog
 from tech_agents.schemas.workflows import Backlog, ExecutionPlan
+from tech_agents.evals.runner import EvalRunner
 from tech_agents.utils import read_text, write_text_if_missing
 from tech_agents.validate import RepoValidationError, validate_repo
 
@@ -97,6 +98,41 @@ def validate(repo: str) -> None:
     except RepoValidationError as e:
         raise typer.Exit(code=2) from e
     print(summary)
+
+
+@app.command()
+def eval(
+    repo: str,
+    env: str = typer.Option("dev", "--env"),
+    outputs_json: Optional[str] = typer.Option(None, "--outputs-json"),
+    cases: Optional[str] = typer.Option(None, "--cases"),
+    use_expected: bool = typer.Option(False, "--use-expected"),
+    allow_skip_llm_judge: bool = typer.Option(False, "--allow-skip-llm-judge"),
+    model: str = typer.Option("n/a", "--model"),
+    temperature: Optional[float] = typer.Option(None, "--temperature"),
+    output: Optional[str] = typer.Option(None, "--output"),
+    check_gate: bool = typer.Option(False, "--check-gate"),
+) -> None:
+    """Run golden sets evaluation using external outputs or expected outputs."""
+    r = _resolve_repo(repo)
+    golden_sets = r / "evals" / "golden_sets.json"
+    rubricas = r / "evals" / "rubricas.json"
+    output_dir = Path(output).resolve() if output else (r / "evals" / "resultados")
+    case_ids = [c.strip() for c in cases.split(",")] if cases else None
+
+    runner = EvalRunner(golden_sets, rubricas, output_dir)
+    results = runner.run_all(
+        environment=env,
+        outputs_path=outputs_json,
+        use_expected=use_expected,
+        allow_skip_llm_judge=allow_skip_llm_judge,
+        model=model,
+        temperature=temperature,
+        case_ids=case_ids,
+    )
+    print({"summary": results.get("summary"), "gate_status": results.get("gate_status")})
+    if check_gate and not results.get("gate_status", {}).get("can_promote", False):
+        raise typer.Exit(code=3)
 
 
 @app.command()

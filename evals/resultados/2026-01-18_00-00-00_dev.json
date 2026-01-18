@@ -1,0 +1,28 @@
+{
+  "execution_id": "blocked-2026-01-18",
+  "timestamp": "2026-01-18T00:00:00Z",
+  "environment": "dev",
+  "version": {
+    "framework": "0.1.0",
+    "golden_sets": "1.0.0",
+    "rubricas": "1.0.0"
+  },
+  "config": {
+    "model": "n/a",
+    "temperature": null
+  },
+  "summary": {
+    "total_cases": 8,
+    "passed": 0,
+    "failed": 0,
+    "skipped": 8,
+    "pass_rate": 0.0,
+    "duration_seconds": 0
+  },
+  "results": [],
+  "gate_status": {
+    "golden_sets_pass": false,
+    "can_promote": false
+  },
+  "notes": "Execucao bloqueada no momento do registro. Runner agora disponivel; reexecutar com outputs reais."
+}

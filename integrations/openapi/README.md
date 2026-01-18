@@ -16,6 +16,7 @@ Este diretório contém especificações OpenAPI (Swagger) para as integrações
 ```
 openapi/
 ├── README.md           # Este arquivo
+├── example.yaml        # Exemplo mínimo para piloto
 └── [sistema].yaml      # Spec OpenAPI por sistema integrado
 ```
 

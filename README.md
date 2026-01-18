@@ -28,4 +28,5 @@ tech-agents --help
 - `tech-agents install-rules <repo>`
 - `tech-agents validate <repo>`
 - `tech-agents export <repo>`
+- `tech-agents eval <repo> --outputs-json <file>`
 

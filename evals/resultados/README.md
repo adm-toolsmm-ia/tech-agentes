@@ -37,7 +37,7 @@ resultados/
     "rubricas": "1.0.0"
   },
   "config": {
-    "model": "gpt-4o",
+    "model": "gpt-5.2-codex",
     "temperature": 0.1
   },
   "summary": {
@@ -92,14 +92,14 @@ resultados/
 ### Via CLI
 
 ```bash
-# Rodar todos os golden sets
-tech-agents eval --golden-sets all --env dev --output evals/resultados/
+# Rodar todos os golden sets com outputs externos
+tech-agents eval . --outputs-json outputs_eval.json --env dev
 
 # Rodar casos específicos
-tech-agents eval --golden-sets extraction-json-001,analysis-requirements-001 --env dev
+tech-agents eval . --cases extraction-json-001,analysis-requirements-001 --outputs-json outputs_eval.json
 
-# Rodar e verificar gate
-tech-agents eval --golden-sets all --env stage --check-gate
+# Smoke test (usa expected_output como saída)
+tech-agents eval . --use-expected --allow-skip-llm-judge
 ```
 
 ### Via Código
@@ -110,16 +110,14 @@ from tech_agents.evals import EvalRunner
 runner = EvalRunner(
     golden_sets_path="evals/golden_sets.json",
     rubricas_path="evals/rubricas.json",
-    output_dir="evals/resultados/"
+    output_dir="evals/resultados/",
 )
 
-results = runner.run_all(environment="dev")
-print(f"Pass rate: {results.pass_rate}")
-
-if results.can_promote:
-    print("✅ Pode promover para próximo ambiente")
-else:
-    print("❌ Falhas detectadas, revisar antes de promover")
+results = runner.run_all(
+    environment="dev",
+    outputs_path="outputs_eval.json",
+)
+print(results["summary"])
 ```
 
 ---

@@ -156,7 +156,7 @@ Instruções adicionais:
 
 | Parâmetro | Valor | Justificativa |
 |-----------|-------|---------------|
-| **Modelo** | [gpt-4o / claude-sonnet / etc] | [Razão] |
+| **Modelo** | [gpt-5.2-codex / opus-4.5 / sonnet-4.5 / gpt-4o] | [Razão] |
 | **Temperature** | [0.0 - 1.0] | [Razão] |
 | **Top-p** | [0.0 - 1.0] | [Razão] |
 | **Max Tokens** | [número] | [Razão] |
@@ -350,7 +350,7 @@ result = prompt.execute(
     contexto="...",
     tarefa="...",
     dados="...",
-    model="gpt-4o",
+    model="gpt-5.2-codex",
     temperature=0.1
 )
 ```

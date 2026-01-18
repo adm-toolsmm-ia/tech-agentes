@@ -50,9 +50,9 @@ Templates para governança e contratos de dados.
 
 | Template | Descrição | Quando Usar |
 |----------|-----------|-------------|
-| [`01_data_dictionary.md`](data/01_data_dictionary.md) | Dicionário de dados | Modelagem de dados |
-| [`02_data_flow.md`](data/02_data_flow.md) | Fluxo de dados | ETL, integrações |
-| [`03_data_quality.md`](data/03_data_quality.md) | Qualidade de dados | Validação, monitoramento |
+| [`01_data_contract.md`](data/01_data_contract.md) | Contrato de dados | Integrações, consumo de dados |
+| [`02_data_dictionary.md`](data/02_data_dictionary.md) | Dicionário de dados | Modelagem de dados |
+| [`03_migration_etl_plan.md`](data/03_migration_etl_plan.md) | Plano de migração/ETL | ETL, integrações |
 
 ### DevOps (`devops/`)
 
@@ -80,7 +80,7 @@ Templates para compliance e aspectos legais.
 
 | Template | Descrição | Quando Usar |
 |----------|-----------|-------------|
-| [`01_privacy_notice.md`](legal/01_privacy_notice.md) | Aviso de privacidade | Projetos com PII |
+| [`01_oss_licensing_compliance.md`](legal/01_oss_licensing_compliance.md) | Compliance de licenças OSS | Uso de dependências |
 
 ### Observabilidade (`observability/`)
 
@@ -107,11 +107,11 @@ Templates para gestão de projeto.
 
 | Template | Descrição | Quando Usar |
 |----------|-----------|-------------|
-| [`01_project_charter.md`](project/01_project_charter.md) | Charter do projeto | Início de projeto |
-| [`02_stakeholder_analysis.md`](project/02_stakeholder_analysis.md) | Análise de stakeholders | Planejamento |
-| [`03_risk_register.md`](project/03_risk_register.md) | Registro de riscos | Gestão de riscos |
-| [`04_communication_plan.md`](project/04_communication_plan.md) | Plano de comunicação | Coordenação |
-| [`05_lessons_learned.md`](project/05_lessons_learned.md) | Lições aprendidas | Encerramento |
+| [`01_project_brief.md`](project/01_project_brief.md) | Brief do projeto | Início de projeto |
+| [`02_sow_scope.md`](project/02_sow_scope.md) | Escopo/SOW | Planejamento |
+| [`03_raci_stakeholders.md`](project/03_raci_stakeholders.md) | RACI & stakeholders | Governança |
+| [`04_kpis_okrs.md`](project/04_kpis_okrs.md) | KPIs & OKRs | Metas e sucesso |
+| [`05_risk_register.md`](project/05_risk_register.md) | Registro de riscos | Gestão de riscos |
 
 ### QA (`qa/`)
 
@@ -129,9 +129,9 @@ Templates para captura de requisitos.
 
 | Template | Descrição | Quando Usar |
 |----------|-----------|-------------|
-| [`01_user_story.md`](requirements/01_user_story.md) | User story | Requisitos funcionais |
-| [`02_use_case.md`](requirements/02_use_case.md) | Caso de uso | Fluxos detalhados |
-| [`03_acceptance_criteria.md`](requirements/03_acceptance_criteria.md) | Critérios de aceite | Validação |
+| [`01_brd_negocio.md`](requirements/01_brd_negocio.md) | BRD (Negócio) | Visão e objetivos |
+| [`02_frd_funcional.md`](requirements/02_frd_funcional.md) | FRD (Funcional) | Requisitos funcionais |
+| [`03_user_stories.md`](requirements/03_user_stories.md) | User stories | Detalhamento de casos |
 
 ### Segurança (`security/`)
 
@@ -152,7 +152,7 @@ Templates para segurança e compliance.
 
 | Fase | Templates Essenciais |
 |------|---------------------|
-| **Kick-off** | Project Charter, Stakeholder Analysis, Risk Register |
+| **Kick-off** | Project Brief, RACI & Stakeholders, Risk Register |
 | **Discovery** | User Stories, Data Dictionary, System Architecture |
 | **Design** | ADR, C4 Diagrams, API Spec, Threat Model |
 | **Desenvolvimento** | Test Plan, CI/CD Pipeline, Logging Plan |

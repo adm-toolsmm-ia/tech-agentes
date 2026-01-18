@@ -84,7 +84,7 @@ circuit_breaker:
 ### 2.1 Template de Especificação
 
 ```yaml
-# integrations/specs/[sistema].yaml
+# integrations/openapi/[sistema].yaml
 
 metadata:
   name: "Nome do Sistema"
@@ -214,7 +214,7 @@ endpoints:
         model:
           type: "string"
           required: true
-          enum: ["gpt-4o", "gpt-4o-mini", "gpt-4-turbo"]
+          enum: ["gpt-5.2-codex", "sonnet-4.5", "opus-4.5", "gpt-4o", "gpt-4o-mini"]
         messages:
           type: "array"
           required: true
@@ -280,7 +280,7 @@ endpoints:
         model:
           type: "string"
           required: true
-          enum: ["claude-3-opus", "claude-3-sonnet", "claude-3-haiku"]
+          enum: ["opus-4.5", "sonnet-4.5"]
         messages:
           type: "array"
           required: true
@@ -321,7 +321,7 @@ endpoints:
     "method": "POST"
   },
   "request": {
-    "model": "gpt-4o"
+    "model": "gpt-5.2-codex"
   },
   "response": {
     "status": 200,
@@ -395,7 +395,7 @@ openapi-generator-cli generate \
 
 ## 7. Checklist de Nova Integração
 
-- [ ] Spec criada em `integrations/specs/[sistema].yaml`
+- [ ] Spec criada em `integrations/openapi/[sistema].yaml`
 - [ ] Credenciais em `configs/ambientes.json` (apenas refs)
 - [ ] Adicionado em `integrations/inventario_sistemas.json`
 - [ ] Mapeamento de dados em `integrations/mapeamentos_schemas.json`

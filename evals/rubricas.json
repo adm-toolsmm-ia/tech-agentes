@@ -255,7 +255,7 @@
   },
   "evaluation_config": {
     "llm_judge": {
-      "model": "gpt-4o",
+      "model": "gpt-5.2-codex",
       "temperature": 0.0,
       "max_retries": 2
     },

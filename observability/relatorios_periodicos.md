@@ -47,7 +47,7 @@ Este documento define os templates e processos para relatórios periódicos de o
 
 | Modelo | Requests | Tokens | Custo | Latência P50 | Latência P95 |
 |--------|----------|--------|-------|--------------|--------------|
-| gpt-4o | X | X | $X | Xms | Xms |
+| gpt-5.2-codex | X | X | $X | Xms | Xms |
 | claude-sonnet | X | X | $X | Xms | Xms |
 
 ## Performance por Agente
@@ -123,7 +123,7 @@ Este documento define os templates e processos para relatórios periódicos de o
 
 | Modelo | Tokens (M) | Custo | % do Total | Variação MoM |
 |--------|------------|-------|------------|--------------|
-| gpt-4o | X | $Y | Z% | +W% |
+| gpt-5.2-codex | X | $Y | Z% | +W% |
 | claude-sonnet | X | $Y | Z% | +W% |
 | gpt-mini | X | $Y | Z% | +W% |
 

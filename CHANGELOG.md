@@ -8,10 +8,16 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 ## [Unreleased]
 
 ### Added
-- (próximas features serão listadas aqui)
+- Guias de providers de observabilidade (Datadog, Grafana/Prometheus, Langfuse)
+- Exemplo mínimo de OpenAPI em `integrations/openapi/`
+- Evidência de execução bloqueada para golden sets em `evals/resultados/`
+- Runner de evals com CLI `eval` para validar outputs externos
 
 ### Changed
-- (próximas mudanças serão listadas aqui)
+- Catálogo de templates alinhado aos arquivos reais
+- Referências OpenAPI padronizadas para `integrations/openapi/`
+- Templates críticos preenchidos com conteúdo mínimo (legal, project, requirements)
+- Documentação de resultados de evals ajustada para o MVP atual
 
 ---
 

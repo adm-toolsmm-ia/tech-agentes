@@ -67,7 +67,7 @@ Política de roteamento de modelos:
 ```json
 {
   "version": "1.0.0",
-  "pricing_version": "2024-01",
+  "pricing_version": "2026-01",
   "thresholds": {
     "latency_s_p95_max": 8,
     "daily_budget_usd_max": 100
@@ -80,8 +80,8 @@ Política de roteamento de modelos:
   "routing": [
     {
       "task_class": "architecture|compliance|context_long",
-      "preferred": ["gpt-4o", "claude-3-opus", "gemini-1.5-pro"],
-      "fallback": ["gpt-4o-mini", "claude-3-sonnet"],
+      "preferred": ["gpt-5.2-codex", "opus-4.5", "sonnet-4.5"],
+      "fallback": ["gpt-4o", "gpt-4o-mini"],
       "max_temperature": 0.3
     }
   ]

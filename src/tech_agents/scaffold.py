@@ -55,7 +55,7 @@ def init_repo_scaffold(
         target_repo / "configs" / "modelos.json",
         {
             "version": "1.0.0",
-            "pricing_version": "2024-01",
+            "pricing_version": "2026-01",
             "thresholds": {},
             "defaults": {
                 "architecture": {"temperature": 0.2, "top_p": 0.9},
@@ -65,20 +65,20 @@ def init_repo_scaffold(
             "routing": [
                 {
                     "task_class": "architecture|compliance|context_long",
-                    "preferred": ["gpt-4o", "claude-3-opus", "gemini-1.5-pro"],
-                    "fallback": ["gpt-4o-mini", "claude-3-sonnet"],
+                    "preferred": ["gpt-5.2-codex", "opus-4.5", "sonnet-4.5"],
+                    "fallback": ["gpt-4o", "gpt-4o-mini"],
                     "max_temperature": 0.3,
                 },
                 {
                     "task_class": "templated_generation|semi_structured_extraction",
-                    "preferred": ["gpt-4o", "claude-3-sonnet", "gemini-1.5-pro"],
+                    "preferred": ["sonnet-4.5", "gpt-4o", "gpt-5.2-codex"],
                     "fallback": ["gpt-4o-mini"],
                     "max_temperature": 0.5,
                 },
                 {
                     "task_class": "parsing|classification_simple",
                     "preferred": ["gpt-4o-mini"],
-                    "fallback": ["gpt-4o"],
+                    "fallback": ["sonnet-4.5", "gpt-4o"],
                     "max_temperature": 0.3,
                 },
             ],

@@ -22,8 +22,8 @@ Este guia orienta a seleção de modelos de linguagem (LLMs) para cada tipo de t
 
 | Classe | Descrição | Exemplos | Modelo Recomendado |
 |--------|-----------|----------|-------------------|
-| **Arquitetura/Raciocínio Complexo** | Decisões de design, análise profunda | ADRs, code review, planejamento | Frontier (GPT-4o, Claude Opus, Gemini Pro) |
-| **Geração Estruturada** | Código, documentação, templates | Geração de código, docs técnicos | Intermediate (GPT-4o-mini, Claude Sonnet) |
+| **Arquitetura/Raciocínio Complexo** | Decisões de design, análise profunda | ADRs, code review, planejamento | Frontier (GPT-5.2 Codex, Opus 4.5, Sonnet 4.5) |
+| **Geração Estruturada** | Código, documentação, templates | Geração de código, docs técnicos | Intermediate (Sonnet 4.5, GPT-4o) |
 | **Extração/Classificação** | Parsing, NER, classificação | Extrair dados de texto, categorizar | Light (GPT-4o-mini) |
 | **Conversação** | Chat, suporte | Atendimento, Q&A | Intermediate |
 | **Embedding/Busca** | Vetorização, similaridade | RAG, busca semântica | Modelos de embedding específicos |
@@ -53,25 +53,25 @@ Este guia orienta a seleção de modelos de linguagem (LLMs) para cada tipo de t
 
 | Modelo | Provider | Context | Custo (aprox.) | Melhor Para |
 |--------|----------|---------|----------------|-------------|
-| GPT-4o | OpenAI | 128K | $$$$ | Raciocínio complexo, multimodal |
-| Claude 3.5 Sonnet | Anthropic | 200K | $$$ | Código, análise longa |
-| Claude 3 Opus | Anthropic | 200K | $$$$ | Raciocínio avançado |
-| Gemini 1.5 Pro | Google | 1M+ | $$$ | Contexto muito longo |
+| GPT-5.2 Codex | OpenAI | 200K+ | $$$$ | Raciocínio avançado, código crítico |
+| Opus 4.5 | Anthropic | 200K+ | $$$$ | Análise profunda, compliance |
+| Sonnet 4.5 | Anthropic | 200K+ | $$$ | Alta qualidade com melhor custo |
+| GPT-4o | OpenAI | 128K | $$$ | Multimodal, uso geral |
 
 ### 3.2 Modelos Intermediate (Balanceados)
 
 | Modelo | Provider | Context | Custo (aprox.) | Melhor Para |
 |--------|----------|---------|----------------|-------------|
-| GPT-4o-mini | OpenAI | 128K | $$ | Uso geral, custo-benefício |
-| Claude 3.5 Haiku | Anthropic | 200K | $$ | Rápido, eficiente |
-| Gemini 1.5 Flash | Google | 1M | $$ | Contexto longo, baixo custo |
+| Sonnet 4.5 | Anthropic | 200K+ | $$$ | Melhor custo x benefício para geração estruturada |
+| GPT-4o | OpenAI | 128K | $$$ | Qualidade com latência estável |
+| GPT-4o-mini | OpenAI | 128K | $$ | Volume alto, custo reduzido |
 
 ### 3.3 Modelos Light (Baixo Custo)
 
 | Modelo | Provider | Context | Custo (aprox.) | Melhor Para |
 |--------|----------|---------|----------------|-------------|
 | GPT-4o-mini | OpenAI | 128K | $ | Classificação, parsing |
-| Gemini 1.5 Flash | Google | 1M | $ | Tarefas simples em larga escala |
+| Sonnet 4.5 | Anthropic | 200K+ | $$ | Fallback de qualidade quando necessário |
 
 ### 3.4 Modelos de Embedding
 
@@ -108,8 +108,8 @@ Este guia orienta a seleção de modelos de linguagem (LLMs) para cada tipo de t
   "routing": [
     {
       "task_class": "architecture|compliance|context_long",
-      "preferred": ["gpt-4o", "claude-3-opus", "gemini-1.5-pro"],
-      "fallback": ["gpt-4o-mini", "claude-3-sonnet"],
+      "preferred": ["gpt-5.2-codex", "opus-4.5", "sonnet-4.5"],
+      "fallback": ["gpt-4o", "gpt-4o-mini"],
       "max_temperature": 0.3
     }
   ]
@@ -199,10 +199,12 @@ flowchart TD
 
 ```yaml
 fallback_policy:
-  primary: "gpt-4o"
+  primary: "gpt-5.2-codex"
   fallbacks:
-    - model: "claude-sonnet"
+    - model: "sonnet-4.5"
       condition: "primary_unavailable OR latency > 10s"
+    - model: "gpt-4o"
+      condition: "quality_degradation OR cost_spike"
     - model: "gpt-4o-mini"
       condition: "all_premium_unavailable"
 
@@ -277,8 +279,9 @@ alerts:
 
 | Modelo | Tarefa | Accuracy | Latency P95 | Cost/1K | Data | Decisão |
 |--------|--------|----------|-------------|---------|------|---------|
-| gpt-4o | extração | 98% | 2.1s | $0.03 | 2026-01 | ✅ Aprovado |
-| gpt-4o-mini | extração | 95% | 0.8s | $0.01 | 2026-01 | ✅ Alternativa |
+| gpt-5.2-codex | extração | 99% | 2.0s | $0.05 | 2026-01 | ✅ Aprovado |
+| sonnet-4.5 | extração | 97% | 1.6s | $0.03 | 2026-01 | ✅ Alternativa |
+| gpt-4o-mini | extração | 95% | 0.8s | $0.01 | 2026-01 | ✅ Econômico |
 
 ---
 

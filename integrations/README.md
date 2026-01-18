@@ -67,7 +67,7 @@ O arquivo `inventario_sistemas.json` mantém um registro de todos os sistemas ex
     "contains_pii": false,
     "notes": ""
   },
-  "endpoints_doc": "integrations/specs/novo-sistema.yaml"
+  "endpoints_doc": "integrations/openapi/novo-sistema.yaml"
 }
 ```
 
@@ -91,7 +91,7 @@ O arquivo `inventario_sistemas.json` mantém um registro de todos os sistemas ex
 
 ### 3. Criar Especificação
 
-Seguir template em [`specs_endpoints.md`](specs_endpoints.md) ou criar arquivo YAML/OpenAPI em `integrations/specs/`.
+Seguir template em [`specs_endpoints.md`](specs_endpoints.md) ou criar arquivo YAML/OpenAPI em `integrations/openapi/`.
 
 ### 4. Definir Mapeamentos (se ETL)
 
