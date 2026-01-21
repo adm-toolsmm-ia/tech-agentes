@@ -1,13 +1,21 @@
 # Integrações
 
-> **Versão**: 1.0.0
-> **Última atualização**: 2026-01-18
+> **Versão**: 1.1.0
+> **Última atualização**: 2026-01-21
 
 ---
 
 ## Visão Geral
 
-Este diretório contém as especificações e contratos de integrações externas para o framework tech-agentes.
+Este diretório contém as especificações e contratos de integrações externas para o Portal Tech Arauz.
+
+---
+
+## Integrações Ativas
+
+| Sistema | Tipo | Status | Documentação |
+|---------|------|--------|--------------|
+| **Espaider** | ERP (WCF) | ✅ Ativo | [espaider_api.md](espaider_api.md) |
 
 ---
 
@@ -15,6 +23,7 @@ Este diretório contém as especificações e contratos de integrações externa
 
 | Arquivo | Descrição |
 |---------|-----------|
+| [`espaider_api.md`](espaider_api.md) | Documentação completa da integração Espaider |
 | [`inventario_sistemas.json`](inventario_sistemas.json) | Inventário de sistemas integrados |
 | [`mapeamentos_schemas.json`](mapeamentos_schemas.json) | Mapeamento de dados entre sistemas |
 | [`specs_endpoints.md`](specs_endpoints.md) | Especificações de endpoints e padrões |

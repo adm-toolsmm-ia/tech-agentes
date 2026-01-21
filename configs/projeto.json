@@ -1,18 +1,136 @@
 {
-  "name": "tech-agentes",
+  "name": "tech-arauz-mvp",
+  "display_name": "Portal Tech Arauz",
   "version": "0.1.0",
   "owners": ["CTO"],
   "environment": "dev",
-  "tenant_id": "",
-  "deadlines": {},
-  "kpis": [],
-  "acceptance_criteria": [
-    "CLI init/install-rules/validate funcionais",
-    "Scaffold completo do prompt presente no repo",
-    "Sem estimativas de tokens/latência/custo sem instrumentação"
+  "tenant_id": "arauz",
+  "deadlines": {
+    "mvp": null,
+    "beta": null,
+    "go_live": null
+  },
+  "kpis": [
+    {
+      "id": "kpi-001",
+      "name": "Solicitações sincronizadas",
+      "description": "% de solicitações do Espaider visíveis no portal",
+      "target": 100,
+      "unit": "%",
+      "baseline": 0
+    },
+    {
+      "id": "kpi-002",
+      "name": "Tempo de carregamento do Dashboard",
+      "description": "P95 de latência para carregar Dashboard Geral",
+      "target": 2000,
+      "unit": "ms",
+      "baseline": null
+    },
+    {
+      "id": "kpi-003",
+      "name": "Cobertura de testes",
+      "description": "% de cobertura de código nos hooks e componentes críticos",
+      "target": 70,
+      "unit": "%",
+      "baseline": 0
+    },
+    {
+      "id": "kpi-004",
+      "name": "Documentações criadas",
+      "description": "Quantidade de documentações técnicas no portal",
+      "target": 10,
+      "unit": "docs",
+      "baseline": 0
+    },
+    {
+      "id": "kpi-005",
+      "name": "Usuários ativos",
+      "description": "Número de usuários únicos usando o portal",
+      "target": 5,
+      "unit": "users",
+      "baseline": 0
+    }
   ],
-  "constraints": [],
-  "budgets": { "run_usd": 0, "daily_usd": 0, "project_usd": 0 },
-  "slo": { "latency_s": 8, "critical_error_rate_max": 0.01, "daily_budget_usd": 0 },
-  "instrumentation": { "provider": "none", "enabled": false, "notes": "Enable Langfuse/Helicone/SDK for stage/prod." }
+  "acceptance_criteria": [
+    "Dashboard Geral funcionando com KPIs reais",
+    "Kanban e Lista de solicitações funcionando",
+    "Autenticação e controle de acesso por roles",
+    "RLS ativo e testado em todas as tabelas",
+    "CRUD de documentações funcionando",
+    "CI/CD configurado com testes automatizados"
+  ],
+  "constraints": [
+    {
+      "type": "technical",
+      "description": "Stack: React + TypeScript + Vite + Tailwind + Shadcn/ui",
+      "reason": "Consistência com protótipo e DX"
+    },
+    {
+      "type": "technical",
+      "description": "Backend: Supabase (Auth + Database + RLS)",
+      "reason": "Custo previsível, serverless"
+    },
+    {
+      "type": "business",
+      "description": "Integração apenas com Espaider no MVP",
+      "reason": "Foco e complexidade controlada"
+    }
+  ],
+  "budgets": {
+    "run_usd": 0,
+    "daily_usd": 0,
+    "project_usd": 0,
+    "notes": "Supabase free tier para dev, orçamento a definir para stage/prod"
+  },
+  "slo": {
+    "latency_p95_ms": 2000,
+    "critical_error_rate_max": 0.01,
+    "uptime_target": 0.99,
+    "notes": "SLOs iniciais para ambiente dev, revisar para prod"
+  },
+  "instrumentation": {
+    "provider": "none",
+    "enabled": false,
+    "notes": "Habilitar Langfuse/Sentry para stage/prod quando aplicável"
+  },
+  "integrations": [
+    {
+      "id": "int-001",
+      "name": "Espaider API",
+      "type": "source",
+      "protocol": "REST",
+      "status": "configured",
+      "frequency": "daily",
+      "notes": "Sincronização de solicitações, entregas, cronogramas, requisitos"
+    }
+  ],
+  "team": {
+    "product_owner": "CTO",
+    "tech_lead": "AI Assistant (tech-agentes)",
+    "developers": [],
+    "qa": "AI Assistant (tech-agentes)",
+    "devops": "AI Assistant (tech-agentes)"
+  },
+  "repositories": {
+    "frontend": "tech-arauz",
+    "docs": "tech-arauz/docs"
+  },
+  "environments": {
+    "dev": {
+      "url": "http://localhost:5173",
+      "supabase_project": "local",
+      "auto_deploy": false
+    },
+    "stage": {
+      "url": null,
+      "supabase_project": null,
+      "auto_deploy": true
+    },
+    "prod": {
+      "url": null,
+      "supabase_project": null,
+      "auto_deploy": false
+    }
+  }
 }

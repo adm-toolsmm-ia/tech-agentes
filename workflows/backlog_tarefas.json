@@ -1,13 +1,429 @@
 {
-  "version": "0.1.0",
+  "version": "1.2.0",
+  "project": "TECH-ARAUZ-MVP",
+  "updated_at": "2026-01-19",
+  "owner": "CTO",
   "items": [
     {
-      "id": "add-specialist-protocol",
-      "assigned_to": "orquestrador",
-      "goal": "Formalizar protocolo ROI para criação de specialists (cap=2/iteração) e gates do CTO",
-      "acceptance_criteria": ["Documento de padrões atualizado com protocolo e exemplos"],
+      "id": "mvp-001",
+      "module": "core",
+      "assigned_to": "eng_software_arquiteto_ia_devops",
+      "goal": "Refatorar estrutura de pastas do frontend para feature-based architecture",
+      "priority": "high",
+      "acceptance_criteria": [
+        "Pastas organizadas por feature (dashboard, solicitacoes, documentacoes, admin)",
+        "Componentes compartilhados em /shared ou /components/ui",
+        "Hooks e utils separados por domínio quando aplicável"
+      ],
+      "deliverable_format": "code",
+      "deadline": "",
+      "dependencies": [],
+      "status": "completed",
+      "completed_at": "2026-01-18"
+    },
+    {
+      "id": "mvp-002",
+      "module": "core",
+      "assigned_to": "eng_software_arquiteto_ia_devops",
+      "goal": "Substituir mock data por integração real com Supabase",
+      "priority": "high",
+      "acceptance_criteria": [
+        "Criar hooks customizados com React Query para cada entidade",
+        "Implementar loading/error states consistentes",
+        "Todas as páginas usando dados reais"
+      ],
+      "deliverable_format": "code",
+      "deadline": "",
+      "dependencies": ["mvp-001"],
+      "status": "completed",
+      "completed_at": "2026-01-19",
+      "notes": "Migração completa - todas as páginas integradas com Supabase"
+    },
+    {
+      "id": "mvp-003",
+      "module": "dashboard",
+      "assigned_to": "eng_software_arquiteto_ia_devops",
+      "goal": "Dashboard Geral com KPIs reais do Supabase",
+      "priority": "high",
+      "acceptance_criteria": [
+        "KPIs calculados a partir de dados reais",
+        "Gráficos atualizados com dados do período selecionado",
+        "Drill-down funcional para lista de tickets"
+      ],
+      "deliverable_format": "code",
+      "deadline": "",
+      "dependencies": ["mvp-002"],
+      "status": "completed",
+      "completed_at": "2026-01-18"
+    },
+    {
+      "id": "mvp-004",
+      "module": "dashboard",
+      "assigned_to": "eng_software_arquiteto_ia_devops",
+      "goal": "Dashboard Gestão com métricas gerenciais",
+      "priority": "medium",
+      "acceptance_criteria": [
+        "Métricas de SLA e tempo médio de atendimento",
+        "Gráficos de evolução por período",
+        "Filtros por área/responsável"
+      ],
+      "deliverable_format": "code",
+      "deadline": "",
+      "dependencies": ["mvp-003"],
+      "status": "completed",
+      "completed_at": "2026-01-19"
+    },
+    {
+      "id": "mvp-005",
+      "module": "dashboard",
+      "assigned_to": "eng_software_arquiteto_ia_devops",
+      "goal": "Dashboard Tecnologia com métricas técnicas",
+      "priority": "medium",
+      "acceptance_criteria": [
+        "Status de integrações/APIs",
+        "Logs recentes de sincronização",
+        "Alertas de erros"
+      ],
+      "deliverable_format": "code",
+      "deadline": "",
+      "dependencies": ["mvp-003", "mvp-012"],
+      "status": "completed",
+      "completed_at": "2026-01-19"
+    },
+    {
+      "id": "mvp-006",
+      "module": "solicitacoes",
+      "assigned_to": "eng_software_arquiteto_ia_devops",
+      "goal": "Kanban de solicitações com dados reais e drag-and-drop",
+      "priority": "high",
+      "acceptance_criteria": [
+        "Colunas dinâmicas baseadas em etapas_kanban do Supabase",
+        "Drag-and-drop atualiza etapa no banco",
+        "Cards exibem informações essenciais"
+      ],
+      "deliverable_format": "code",
+      "deadline": "",
+      "dependencies": ["mvp-002"],
+      "status": "completed",
+      "completed_at": "2026-01-18"
+    },
+    {
+      "id": "mvp-007",
+      "module": "solicitacoes",
+      "assigned_to": "eng_software_arquiteto_ia_devops",
+      "goal": "Lista de solicitações com ordenação, busca e filtros avançados",
+      "priority": "high",
+      "acceptance_criteria": [
+        "Tabela com ordenação por coluna",
+        "Busca por código/título",
+        "Filtros por status/prioridade/tipo/área"
+      ],
+      "deliverable_format": "code",
+      "deadline": "",
+      "dependencies": ["mvp-002"],
+      "status": "completed",
+      "completed_at": "2026-01-18"
+    },
+    {
+      "id": "mvp-008",
+      "module": "solicitacoes",
+      "assigned_to": "eng_software_arquiteto_ia_devops",
+      "goal": "Sheet de detalhes da solicitação com entregas, cronogramas e requisitos",
+      "priority": "high",
+      "acceptance_criteria": [
+        "Abas para Entregas, Cronogramas, Requisitos, Interações",
+        "CRUD inline para cada entidade filha",
+        "Histórico de interações visível"
+      ],
+      "deliverable_format": "code",
+      "deadline": "",
+      "dependencies": ["mvp-006", "mvp-007"],
+      "status": "completed",
+      "completed_at": "2026-01-18"
+    },
+    {
+      "id": "mvp-009",
+      "module": "solicitacoes",
+      "assigned_to": "eng_software_arquiteto_ia_devops",
+      "goal": "Formulário de criação/edição de solicitação",
+      "priority": "medium",
+      "acceptance_criteria": [
+        "Modal/página com campos obrigatórios",
+        "Validação com Zod",
+        "Feedback de sucesso/erro"
+      ],
+      "deliverable_format": "code",
+      "deadline": "",
+      "dependencies": ["mvp-008"],
+      "status": "pending"
+    },
+    {
+      "id": "mvp-010",
+      "module": "tarefas",
+      "assigned_to": "eng_software_arquiteto_ia_devops",
+      "goal": "Gestão de tarefas de sincronização com Espaider",
+      "priority": "medium",
+      "acceptance_criteria": [
+        "CRUD de tarefas de sincronização",
+        "Execução manual com feedback",
+        "Configuração de frequência (diária/semanal/mensal)"
+      ],
+      "deliverable_format": "code",
+      "deadline": "",
+      "dependencies": ["mvp-002", "mvp-021"],
+      "status": "completed",
+      "completed_at": "2026-01-19"
+    },
+    {
+      "id": "mvp-011",
+      "module": "documentacoes",
+      "assigned_to": "eng_software_arquiteto_ia_devops",
+      "goal": "CRUD de documentações com editor Markdown",
+      "priority": "medium",
+      "acceptance_criteria": [
+        "Criar/editar/excluir documentações",
+        "Editor com toolbar de formatação",
+        "Preview de Markdown renderizado",
+        "Categorização e busca"
+      ],
+      "deliverable_format": "code",
+      "deadline": "",
+      "dependencies": ["mvp-002"],
+      "status": "completed",
+      "completed_at": "2026-01-19"
+    },
+    {
+      "id": "mvp-012",
+      "module": "logs",
+      "assigned_to": "eng_software_arquiteto_ia_devops",
+      "goal": "Visualização de logs com sanitização por role",
+      "priority": "medium",
+      "acceptance_criteria": [
+        "Tabela expansível com detalhes",
+        "Stack traces visíveis apenas para admin",
+        "Tokens/URLs sanitizados para não-admins"
+      ],
+      "deliverable_format": "code",
+      "deadline": "",
+      "dependencies": ["mvp-002", "mvp-021"],
+      "status": "completed",
+      "completed_at": "2026-01-19"
+    },
+    {
+      "id": "mvp-013",
+      "module": "admin",
+      "assigned_to": "eng_software_arquiteto_ia_devops",
+      "goal": "Configuração de APIs (admin only)",
+      "priority": "high",
+      "acceptance_criteria": [
+        "CRUD de configurações de API",
+        "Token mascarado na UI (usar view apis_safe)",
+        "Teste de conexão"
+      ],
+      "deliverable_format": "code",
+      "deadline": "",
+      "dependencies": ["mvp-002"],
+      "status": "completed",
+      "completed_at": "2026-01-18"
+    },
+    {
+      "id": "mvp-014",
+      "module": "admin",
+      "assigned_to": "eng_software_arquiteto_ia_devops",
+      "goal": "Gestão de automações (admin only)",
+      "priority": "low",
+      "acceptance_criteria": [
+        "CRUD de automações",
+        "Ativar/desativar",
+        "Executar manualmente"
+      ],
+      "deliverable_format": "code",
+      "deadline": "",
+      "dependencies": ["mvp-002"],
+      "status": "completed",
+      "completed_at": "2026-01-19"
+    },
+    {
+      "id": "mvp-015",
+      "module": "admin",
+      "assigned_to": "eng_software_arquiteto_ia_devops",
+      "goal": "Tabelas auxiliares configuráveis",
+      "priority": "low",
+      "acceptance_criteria": [
+        "CRUD para Status, Tipos, Prioridades, Categorias, Áreas, Etapas Kanban",
+        "Ordenação customizável",
+        "Cores configuráveis"
+      ],
+      "deliverable_format": "code",
+      "deadline": "",
+      "dependencies": ["mvp-002"],
+      "status": "completed",
+      "completed_at": "2026-01-19"
+    },
+    {
+      "id": "mvp-016",
+      "module": "auth",
+      "assigned_to": "eng_software_arquiteto_ia_devops",
+      "goal": "Melhorar fluxo de autenticação e gestão de perfil",
+      "priority": "medium",
+      "acceptance_criteria": [
+        "Página de login com branding",
+        "Recuperação de senha",
+        "Página de perfil do usuário"
+      ],
+      "deliverable_format": "code",
+      "deadline": "",
+      "dependencies": [],
+      "status": "pending"
+    },
+    {
+      "id": "mvp-017",
+      "module": "qa",
+      "assigned_to": "qualidade_auditoria_testes",
+      "goal": "Implementar testes unitários e de integração para hooks e componentes críticos",
+      "priority": "medium",
+      "acceptance_criteria": [
+        "Cobertura mínima de 70% nos hooks de dados",
+        "Testes de componentes principais (KPICard, TicketCard, KanbanBoard)",
+        "CI rodando testes automaticamente"
+      ],
+      "deliverable_format": "code",
+      "deadline": "",
+      "dependencies": ["mvp-002"],
+      "status": "pending"
+    },
+    {
+      "id": "mvp-018",
+      "module": "devops",
+      "assigned_to": "eng_software_arquiteto_ia_devops",
+      "goal": "Configurar CI/CD com GitHub Actions",
+      "priority": "medium",
+      "acceptance_criteria": [
+        "Pipeline de lint + test + build",
+        "Deploy automático para staging",
+        "Notificação de falhas"
+      ],
+      "deliverable_format": "yaml+code",
+      "deadline": "",
+      "dependencies": ["mvp-017"],
+      "status": "pending"
+    },
+    {
+      "id": "mvp-019",
+      "module": "observability",
+      "assigned_to": "observabilidade_custos",
+      "goal": "Configurar logging estruturado e métricas básicas",
+      "priority": "low",
+      "acceptance_criteria": [
+        "Logs estruturados com run_id",
+        "Métricas de latência de API",
+        "Dashboard de observabilidade (futuro)"
+      ],
+      "deliverable_format": "code+config",
+      "deadline": "",
+      "dependencies": ["mvp-018"],
+      "status": "pending"
+    },
+    {
+      "id": "mvp-020",
+      "module": "security",
+      "assigned_to": "seguranca_compliance",
+      "goal": "Auditoria de segurança e validação de RLS",
+      "priority": "high",
+      "acceptance_criteria": [
+        "Todas as tabelas com RLS ativo e testado",
+        "Tokens nunca expostos em logs ou UI",
+        "Validação de inputs em todas as mutations"
+      ],
       "deliverable_format": "md",
-      "deadline": ""
+      "deadline": "",
+      "dependencies": ["mvp-002"],
+      "status": "completed",
+      "completed_at": "2026-01-18",
+      "notes": "Assessment inicial concluido, revisao continua"
+    },
+    {
+      "id": "mvp-021",
+      "module": "database",
+      "assigned_to": "eng_software_arquiteto_ia_devops",
+      "goal": "Criar tabelas de sincronização (tarefas_sincronizacao, logs_execucao)",
+      "priority": "high",
+      "acceptance_criteria": [
+        "Tabela tarefas_sincronizacao com RLS",
+        "Tabela logs_execucao com RLS",
+        "View logs_execucao_safe com sanitizacao",
+        "Campos Espaider em solicitacoes"
+      ],
+      "deliverable_format": "sql",
+      "deadline": "",
+      "dependencies": [],
+      "status": "completed",
+      "completed_at": "2026-01-19"
+    },
+    {
+      "id": "mvp-022",
+      "module": "integracao",
+      "assigned_to": "eng_software_arquiteto_ia_devops",
+      "goal": "Edge Functions para sincronização com Espaider",
+      "priority": "high",
+      "acceptance_criteria": [
+        "sync-solicitacoes com retry e circuit breaker",
+        "test-api-connection para validar config",
+        "Logs de execucao automaticos"
+      ],
+      "deliverable_format": "typescript",
+      "deadline": "",
+      "dependencies": ["mvp-021"],
+      "status": "completed",
+      "completed_at": "2026-01-19"
+    },
+    {
+      "id": "mvp-023",
+      "module": "core",
+      "assigned_to": "eng_software_arquiteto_ia_devops",
+      "goal": "Remover mockData.ts e finalizar migracao",
+      "priority": "high",
+      "acceptance_criteria": [
+        "Todas as paginas usando dados do Supabase",
+        "Arquivo mockData.ts removido",
+        "Sem referencias a dados mock no codigo"
+      ],
+      "deliverable_format": "code",
+      "deadline": "",
+      "dependencies": ["mvp-010", "mvp-011", "mvp-012", "mvp-014", "mvp-015"],
+      "status": "completed",
+      "completed_at": "2026-01-19"
+    },
+    {
+      "id": "mvp-024",
+      "module": "integracao",
+      "assigned_to": "eng_software_arquiteto_ia_devops",
+      "goal": "Configurar pg_cron para agendamentos automáticos",
+      "priority": "medium",
+      "acceptance_criteria": [
+        "Migration com funções de gerenciamento de jobs",
+        "View sync_jobs_status para monitoramento",
+        "Tabela sync_jobs_config para configuração"
+      ],
+      "deliverable_format": "sql",
+      "deadline": "",
+      "dependencies": ["mvp-022"],
+      "status": "completed",
+      "completed_at": "2026-01-19"
     }
+  ],
+  "summary": {
+    "total": 24,
+    "completed": 19,
+    "in_progress": 0,
+    "pending": 5,
+    "completion_percentage": 79
+  },
+  "priority_order": [
+    "mvp-009",
+    "mvp-016",
+    "mvp-017",
+    "mvp-018",
+    "mvp-019"
   ]
 }
