@@ -190,7 +190,7 @@ A tabela `espaider_field_mapping` possui RLS:
 ### Logs de Execução
 
 ```sql
-SELECT 
+SELECT
   status,
   registros_processados,
   registros_novos,
@@ -226,10 +226,72 @@ WHERE tipo = 'espaider';
 
 ---
 
+## Teste de API
+
+O teste de conexão da API é feito via Edge Function `test-api` para evitar problemas de CORS:
+
+```typescript
+// Via UI (botão Testar)
+const { data, error } = await supabase.functions.invoke('test-api', {
+  body: { api_id: 'uuid-da-api' }
+});
+```
+
+A função retorna:
+- `success`: boolean indicando se a conexão foi bem-sucedida
+- `status`: código HTTP da resposta
+- `statusText`: texto do status HTTP
+
+---
+
+## Tarefas de Sincronização
+
+### Configuração de Tarefa
+
+Cada tarefa de sincronização pode ser configurada com:
+
+| Campo | Descrição | Exemplo |
+|-------|-----------|---------|
+| `nome` | Nome identificador da tarefa | Sync Projetos Espaider |
+| `tipo` | Tipo da tarefa | espaider |
+| `api_id` | API Espaider associada | UUID da API |
+| `frequencia` | Frequência de execução | manual, diaria, semanal, mensal |
+| `cron_schedule` | Expressão cron customizada | `0 6 * * *` |
+| `timezone` | Fuso horário | America/Sao_Paulo |
+| `prioridade` | Prioridade (1=alta, 10=baixa) | 5 |
+| `ativo` | Se a tarefa está ativa | true |
+
+### Execução Manual
+
+Para executar uma tarefa manualmente (sem agendamento):
+
+1. Acesse a tela de **Tarefas de Sync** (`/tarefas`)
+2. Clique no botão **Executar** (ícone Play) na tarefa desejada
+3. A execução será registrada em `logs_execucao` com:
+   - Status (sucesso, erro, parcial)
+   - Duração em milissegundos
+   - Quantidade de registros processados/criados/atualizados/erros
+   - Mensagem de erro (se houver)
+
+### Logs de Execução
+
+Todos os logs são armazenados na tabela `logs_execucao` com:
+
+- **Tempo**: `iniciado_em`, `finalizado_em`, `duracao_ms`
+- **Status**: `executando`, `sucesso`, `erro`, `parcial`, `cancelado`
+- **Métricas**: `registros_processados`, `registros_novos`, `registros_atualizados`, `registros_erros`
+- **Erros**: `mensagem_erro` e `detalhes` (JSONB)
+
+---
+
 ## Próximos Passos
 
+- [x] Teste de API via Edge Function (evita CORS)
+- [x] Configuração parametrizável de tarefas
+- [x] Execução manual de tarefas
+- [x] Logs completos de execução
 - [ ] Implementar sincronização de Entregas
 - [ ] Implementar sincronização de Cronogramas
 - [ ] Implementar sincronização de Requisitos
-- [ ] Adicionar webhook para sync automático
+- [ ] Integração com pg_cron para agendamento automático
 - [ ] Dashboard de métricas de sincronização
