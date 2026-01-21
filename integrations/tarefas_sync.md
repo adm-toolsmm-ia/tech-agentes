@@ -114,7 +114,7 @@ Todos os logs são armazenados com informações completas:
 
 ```sql
 -- Últimas execuções de uma tarefa
-SELECT 
+SELECT
   status,
   registros_processados,
   registros_novos,
@@ -129,7 +129,7 @@ ORDER BY iniciado_em DESC
 LIMIT 10;
 
 -- Taxa de sucesso por tarefa
-SELECT 
+SELECT
   t.nome,
   COUNT(*) as total_execucoes,
   COUNT(*) FILTER (WHERE l.status = 'sucesso') as sucessos,

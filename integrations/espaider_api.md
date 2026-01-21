@@ -53,10 +53,12 @@ A integração com o **Espaider** permite sincronizar solicitações/projetos do
 
 ## Estrutura de Dados do Espaider
 
-### Resposta da API
+### Resposta da API (padrão WCF)
 
 ```json
 {
+  "Situacao": "S",
+  "MensagemRetorno": null,
   "ListaRegistros": [
     {
       "IDEspaider": 116727,
@@ -75,6 +77,7 @@ A integração com o **Espaider** permite sincronizar solicitações/projetos do
       ]
     }
   ],
+  "URLPaginacao": null,
   "ListaURLFilhos": []
 }
 ```
@@ -134,9 +137,11 @@ UPDATE status SET codigo_externo = 'Em execução' WHERE nome = 'Em Andamento';
 1. Recebe parâmetros (opcional: `api_id`, `tarefa_id`)
 2. Busca configuração da API Espaider
 3. Cria registro de log de execução
-4. Constrói URL com Token e Identificador
-5. Faz requisição GET para API Espaider
-6. Parseia `ListaRegistros` → `ListaCampos` para objeto plano
+4. Constrói URL com token e identificador (query params)
+5. Faz requisição POST para API Espaider
+6. Valida `Situacao == "S"` (erro se diferente)
+7. Pagina usando `URLPaginacao` quando disponível
+8. Parseia `ListaRegistros` → `ListaCampos` para objeto plano
 7. Mapeia lookups (status, prioridade, tipo, área)
 8. Converte datas do formato BR para ISO
 9. Executa UPSERT baseado em `id_espaider`
@@ -163,6 +168,7 @@ $$);
 
 - **Retry automático**: 3 tentativas com exponential backoff
 - **Timeout**: 60 segundos por requisição
+- **Erro de negócio**: `Situacao != "S"` gera erro com `MensagemRetorno`
 - **Log detalhado**: Erros são armazenados em `logs_execucao.detalhes.errors`
 - **Status parcial**: Se alguns registros falharem, marca como `parcial`
 
@@ -241,6 +247,7 @@ A função retorna:
 - `success`: boolean indicando se a conexão foi bem-sucedida
 - `status`: código HTTP da resposta
 - `statusText`: texto do status HTTP
+- `registros_encontrados`: quantidade retornada no teste (se disponível)
 
 ---
 
