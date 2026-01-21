@@ -239,7 +239,7 @@ O teste de conexão da API é feito via Edge Function `test-api` para evitar pro
 ```typescript
 // Via UI (botão Testar)
 const { data, error } = await supabase.functions.invoke('test-api', {
-  body: { api_id: 'uuid-da-api' }
+  body: { api_id: 'uuid-da-api', include_raw: true }
 });
 ```
 
@@ -248,6 +248,7 @@ A função retorna:
 - `status`: código HTTP da resposta
 - `statusText`: texto do status HTTP
 - `registros_encontrados`: quantidade retornada no teste (se disponível)
+- `raw`: JSON completo da resposta (quando `include_raw = true`)
 
 ---
 
