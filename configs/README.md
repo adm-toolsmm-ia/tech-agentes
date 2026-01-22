@@ -129,11 +129,11 @@ Referências de secrets por ambiente:
 
 ## Validação
 
-Os arquivos são validados automaticamente:
+Os arquivos devem ser validados manualmente:
 
 ```bash
 # Validar configs
-tech-agents validate .
+# Revisar JSON e comparar com os requisitos deste documento
 
 # Erros comuns:
 # - Campo obrigatório faltando
@@ -144,18 +144,9 @@ tech-agents validate .
 
 ---
 
-## Schemas Pydantic
+## Schemas
 
-Os schemas estão definidos em:
-- [`src/tech_agents/schemas/configs.py`](../src/tech_agents/schemas/configs.py)
-- [`src/tech_agents/schemas/common.py`](../src/tech_agents/schemas/common.py)
-
-Para exportar schemas JSON:
-
-```bash
-tech-agents export . --out /tmp/export
-cat /tmp/export/export.schemas.json
-```
+Os schemas de configuração são mantidos no repositório da ferramenta `tech-agentes`.
 
 ---
 

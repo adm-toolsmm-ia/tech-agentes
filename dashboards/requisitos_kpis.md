@@ -104,11 +104,11 @@ unidade: "minutos"
 baseline: 240  # 4 horas
 meta: 30  # 30 minutos
 prazo: "2026-Q1"
-fonte_dados: "Logs do CLI tech-agents init"
+fonte_dados: "Logs internos de setup (CI/Checklist)"
 responsavel: "DevOps Lead"
 frequencia: "Por projeto"
 como_medir:
-  - "Executar `tech-agents init` em projeto novo"
+  - "Registrar tempo de setup do projeto via checklist/CI"
   - "Registrar tempo até validação passar"
   - "Incluir tempo de ajustes manuais"
 ```
@@ -127,7 +127,7 @@ unidade: "%"
 baseline: 40
 meta: 95
 prazo: "2026-Q2"
-fonte_dados: "Resultado de `tech-agents validate`"
+fonte_dados: "Resultado de validação interna (CI/QA)"
 responsavel: "QA Lead"
 frequencia: "Semanal"
 como_medir:
@@ -178,8 +178,8 @@ como_medir:
 
 | KPI | Fonte | Automação |
 |-----|-------|-----------|
-| Tempo de setup | CLI logs | `tech-agents` telemetria |
-| Conformidade | Validação | `tech-agents validate` |
+| Tempo de setup | Logs do CI | Pipeline do projeto |
+| Conformidade | Validação | Checks internos de QA |
 | Uso de modelos | Observability | Langfuse/Helicone |
 
 ### 6.2 Fontes Manuais

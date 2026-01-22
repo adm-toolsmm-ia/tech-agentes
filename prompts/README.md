@@ -162,10 +162,8 @@ Os templates devem ser validados contra golden sets em [`evals/golden_sets.json`
 
 ```bash
 # Validar todos os templates
-tech-agents validate . --include-evals
-
-# Validar template específico
-tech-agents eval --template analise --golden-set extraction-json-001
+# CLI tech-agentes não faz parte deste repositório
+# Use o processo de validação descrito em docs/evals/README.md
 ```
 
 ---

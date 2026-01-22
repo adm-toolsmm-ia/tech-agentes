@@ -300,6 +300,7 @@ O agente `orquestrador` lê e atualiza estes arquivos:
 ### Plano/Resposta Padrão
 
 Output do orquestrador inclui:
+
 - `tasks`: Tarefas delegadas
 - `recommendations`: Sugestões para melhorias
 - `file_ops`: Operações de arquivo necessárias
@@ -308,11 +309,11 @@ Output do orquestrador inclui:
 
 ## Validação
 
-O CLI valida workflows automaticamente:
+O repositório não inclui CLI de validação automática:
 
 ```bash
 # Validar estrutura
-tech-agents validate .
+# Revisar JSON e comparar com o schema descrito neste documento
 
 # Erros comuns:
 # - Dependência circular
@@ -325,5 +326,5 @@ tech-agents validate .
 ## Referências
 
 - [Agente Orquestrador](../agents/orquestrador.md)
-- [Schemas de Workflow](../src/tech_agents/schemas/workflows.py)
-- [Padrões do Projeto](../docs/padrões/padroes_projeto.md)
+- Schemas de workflow são mantidos no repositório da ferramenta `tech-agentes`
+- [Padrões do Projeto](../padrões/padroes_projeto.md)

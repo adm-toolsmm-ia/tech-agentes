@@ -33,7 +33,6 @@ O tech-agentes é um framework padrão para projetos multiagentes com AI/LLM. In
 
 ```
 tech-agentes/
-├── src/tech_agents/     # Código fonte do CLI
 ├── agents/              # Definições de agentes
 ├── configs/             # Configurações de projeto
 ├── templates/           # Templates de documentação
@@ -77,8 +76,7 @@ source .venv/bin/activate  # Linux/Mac
 pip install -e .[dev]
 
 # Verificar instalação
-tech-agents --help
-tech-agents scan .
+# (CLI tech-agentes não faz parte deste repositório)
 ```
 
 ### 2.3 Instalação de Produção
@@ -135,9 +133,6 @@ ruff format .
 # Todos os testes
 pytest tests/ -v
 
-# Com coverage
-pytest tests/ -v --cov=src/tech_agents --cov-report=html
-
 # Testes específicos
 pytest tests/test_cli.py -v
 pytest tests/ -k "test_scan" -v
@@ -165,20 +160,14 @@ ls dist/
 
 # Testar instalação
 pip install dist/*.whl
-tech-agents --help
+# (CLI tech-agentes não faz parte deste repositório)
 ```
 
 ### 3.5 Validar Repo Alvo
 
 ```bash
-# Escanear estrutura
-tech-agents scan /path/to/repo
-
-# Validar configs e schemas
-tech-agents validate /path/to/repo
-
-# Exportar artefatos
-tech-agents export /path/to/repo --out /path/to/output
+# CLI tech-agentes não faz parte deste repositório
+# Para validações, use revisão manual e scripts locais quando aplicável
 ```
 
 ---
@@ -187,7 +176,7 @@ tech-agents export /path/to/repo --out /path/to/output
 
 ### 4.1 CLI não encontrado após instalação
 
-**Sintoma**: `tech-agents: command not found`
+**Sintoma**: CLI não encontrado (não aplicável neste repositório)
 
 **Diagnóstico**:
 ```bash
@@ -199,17 +188,17 @@ pip show -f tech-agentes | grep bin
 
 # Verificar PATH
 echo $PATH
-which tech-agents
+# (CLI tech-agentes não faz parte deste repositório)
 ```
 
 **Solução**:
 ```bash
-# Reinstalar
-pip uninstall tech-agentes
-pip install -e .
+# Reinstalar (se aplicável ao repo da ferramenta)
+# pip uninstall tech-agentes
+# pip install -e .
 
 # Ou adicionar ao PATH
-export PATH="$HOME/.local/bin:$PATH"
+# export PATH="$HOME/.local/bin:$PATH"
 ```
 
 ### 4.2 Erro de validação de schema

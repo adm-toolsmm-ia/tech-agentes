@@ -47,13 +47,9 @@ Critérios de avaliação com escalas definidas:
 
 ```bash
 # Todos os casos (saída externa obrigatória)
-tech-agents eval . --outputs-json outputs_eval.json
-
-# Casos específicos
-tech-agents eval . --cases extraction-json-001,analysis-requirements-001 --outputs-json outputs_eval.json
-
-# Smoke test (usa expected_output como saída)
-tech-agents eval . --use-expected --allow-skip-llm-judge
+# Gere outputs externamente e salve em evals/resultados/outputs_eval.json
+# Para casos específicos, gere apenas os case_ids desejados
+# Smoke test: usar expected_output como saída para validar estrutura
 ```
 
 ### Formato de outputs externos
@@ -85,9 +81,9 @@ cat evals/resultados/latest_dev.json | jq '.results[] | select(.status == "faile
 
 ```bash
 # Verificar se pode promover
-tech-agents eval . --outputs-json outputs_eval.json --check-gate --env stage
-
-# Output:
+# Verificar gate manualmente via resumo em evals/resultados/latest_dev.json
+#
+# Output esperado:
 # ✅ Pass rate: 96% (threshold: 95%)
 # ✅ Critical cases: 5/5 passed
 # ✅ Latency: 2.3s avg (SLO: 8s)
@@ -128,7 +124,7 @@ tech-agents eval . --outputs-json outputs_eval.json --check-gate --env stage
 ### 3. Rodar e Validar
 
 ```bash
-tech-agents eval --cases novo-caso-001
+# Execute o novo caso via pipeline de evals do projeto
 ```
 
 ---

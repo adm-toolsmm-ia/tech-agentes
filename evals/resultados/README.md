@@ -89,36 +89,10 @@ resultados/
 
 ## Como Gerar Resultados
 
-### Via CLI
+### Execução
 
-```bash
-# Rodar todos os golden sets com outputs externos
-tech-agents eval . --outputs-json outputs_eval.json --env dev
-
-# Rodar casos específicos
-tech-agents eval . --cases extraction-json-001,analysis-requirements-001 --outputs-json outputs_eval.json
-
-# Smoke test (usa expected_output como saída)
-tech-agents eval . --use-expected --allow-skip-llm-judge
-```
-
-### Via Código
-
-```python
-from tech_agents.evals import EvalRunner
-
-runner = EvalRunner(
-    golden_sets_path="evals/golden_sets.json",
-    rubricas_path="evals/rubricas.json",
-    output_dir="evals/resultados/",
-)
-
-results = runner.run_all(
-    environment="dev",
-    outputs_path="outputs_eval.json",
-)
-print(results["summary"])
-```
+O repositório não inclui CLI ou SDK para execução automática dos evals.
+Os resultados devem ser gerados por pipeline externa e salvos em `evals/resultados/`.
 
 ---
 

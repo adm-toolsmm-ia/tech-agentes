@@ -15,7 +15,7 @@ Componentes versionados:
 - **Agentes** (`agents/*.md`)
 - **Templates** (`templates/**/*.md`)
 - **Prompts** (`prompts/*.md`)
-- **Schemas** (`src/tech_agents/schemas/*.py`)
+- **Schemas** (mantidos no repositório da ferramenta `tech-agentes`)
 - **Configurações** (`configs/*.json`)
 - **Workflows** (`workflows/*.json`)
 - **Políticas** (`docs/**/*.md`)

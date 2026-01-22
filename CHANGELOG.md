@@ -38,7 +38,7 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 ### Added - Migração Completa v2
 
 #### ADR e Governança
-- ADR-002: Arquitetura de Sincronização com Espaider em `docs/docs/decisoes/adr/ADR-20260119-sync-architecture.md`
+- ADR-002: Arquitetura de Sincronização com Espaider em `docs/decisoes/adr/ADR-20260119-sync-architecture.md`
 - Sistema multi-agente movido para pasta raiz `agents/`
 - Arquivo `.cursorrules` consolidado com regras de acionamento
 - Workflow de delegação em `agents/workflow.json`
@@ -100,19 +100,19 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 ### Added - Phase 1: Foundation (2026-01-18)
 
 #### Documentação do Projeto Oficial
-- Brief completo do Portal Tech Arauz em `docs/docs/brief/brief_atual.md`
+- Brief completo do Portal Tech Arauz em `docs/brief/brief_atual.md`
 - Backlog do MVP com 20 itens em `workflows/backlog_tarefas.json`
 - Plano de execução com 5 fases em `workflows/plano_execucao.json`
 - Configuração do projeto em `configs/projeto.json`
 - Resumo executivo em `outputs/artefatos_gerados/RESUMO_EXECUTIVO_MVP.md`
 
 #### Security Assessment
-- Assessment inicial do protótipo em `docs/docs/seguranca/assessment_mvp.md`
+- Assessment inicial do protótipo em `docs/seguranca/assessment_mvp.md`
 - Validação de RLS em todas as tabelas
 - Confirmação de tokens protegidos via view `apis_safe`
 
 #### ADR - Decisões Arquiteturais
-- ADR-001: Feature-based architecture em `docs/docs/decisoes/adr/ADR-20260118-feature-based-structure.md`
+- ADR-001: Feature-based architecture em `docs/decisoes/adr/ADR-20260118-feature-based-structure.md`
 
 #### Refatoração do Frontend
 - Nova estrutura feature-based: `src/app/`, `src/features/`, `src/shared/`

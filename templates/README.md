@@ -181,7 +181,7 @@ Templates para segurança e compliance.
 cp templates/devops/01_ci_cd_pipeline.md docs/devops/pipeline.md
 
 # Ou criar estrutura completa
-tech-agents init <repo> --templates devops,security,qa
+# (CLI tech-agentes não faz parte deste repositório)
 ```
 
 ### 2. Preencher Metadados
